@@ -8,13 +8,12 @@ Tests for `IxiaChassisDriver`
 import sys
 import unittest
 
-from cloudshell.api.cloudshell_api import ResourceAttributesUpdateRequest, AttributeNameValue
-from cloudshell.api.cloudshell_api import CloudShellAPISession
+from cloudshell.api.cloudshell_api import ResourceAttributesUpdateRequest, AttributeNameValue, CloudShellAPISession
 
 ixia_chassis = {
                 'win-ixos': {'address': '192.168.42.61',
-                             'controller': 'localhost',
-                             'port': '4555',
+                             'controller': '',
+                             'port': '',
                              'modules': 2,
                              },
                 'lin-ixos': {'address': '192.168.42.175',
@@ -22,6 +21,16 @@ ixia_chassis = {
                              'port': '8022',
                              'modules': 1,
                              },
+                'win-ixos-no-defaults': {'address': '192.168.42.61',
+                                         'controller': '192.168.42.61',
+                                         'port': '4555',
+                                         'modules': 2,
+                                         },
+                'lin-ixos-from-ixtcl-server': {'address': '192.168.42.175',
+                                               'controller': 'localhost',
+                                               'port': '',
+                                               'modules': 1,
+                                               },
                 }
 
 
@@ -44,6 +53,10 @@ class TestIxiaChassis2GShell(unittest.TestCase):
 
     def test_lin_ixos(self):
         self._get_inventory('lin-ixos', ixia_chassis['lin-ixos'])
+
+    def test_all(self):
+        for key, value in ixia_chassis.items():
+            self._get_inventory(key, value)
 
     def _get_inventory(self, name, properties):
         self.resource = self.session.CreateResource(resourceFamily='CS_TrafficGeneratorChassis',

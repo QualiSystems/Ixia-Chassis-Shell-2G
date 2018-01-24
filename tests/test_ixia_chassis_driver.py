@@ -15,7 +15,6 @@ from src.driver import IxiaChassis2GDriver
 
 controller = ''
 port = ''
-address = '192.168.28.7'
 address = '192.168.42.175'
 address = '192.168.42.61'
 
