@@ -4,4 +4,4 @@ cloudshell-traffic>=2.0.1
 
 paramiko==1.15.2
 pytrafficgen>=1.2.2
-pyixexplorer==0.9.1
+pyixexplorer==0.9.4

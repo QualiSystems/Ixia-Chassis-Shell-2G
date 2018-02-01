@@ -14,9 +14,9 @@ from shellfoundry.releasetools.test_helper import create_autoload_context_2g
 from src.driver import IxiaChassis2GDriver
 
 controller = ''
-port = ''
-address = '192.168.42.175'
+port = '8022'
 address = '192.168.42.61'
+address = '192.168.42.175'
 
 
 class TestIxiaChassis2GDriver(unittest.TestCase):
