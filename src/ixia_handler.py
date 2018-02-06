@@ -95,7 +95,7 @@ class IxiaHandler(object):
                                     name='Port' + str(port_id),
                                     relative_address=relative_address)
         self.resources.append(resource)
-        supported_speeds = port.supported_speeds() if port.supported_speeds() else ['1000']
+        supported_speeds = port.supported_speeds() if port.supported_speeds() else ['0']
         self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
                                                  attribute_name='CS_TrafficGeneratorPort.Max Speed',
                                                  attribute_value=int(max(supported_speeds, key=int))))
