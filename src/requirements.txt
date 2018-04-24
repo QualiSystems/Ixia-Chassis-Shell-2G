@@ -3,5 +3,4 @@ cloudshell-automation-api>=7.0,<7.1
 cloudshell-traffic>=2.0.1
 
 paramiko==1.15.2
-pytrafficgen>=1.2.2
-pyixexplorer==0.9.4
+pyixexplorer==1.0.1

@@ -3,7 +3,6 @@ from os import path
 
 from cloudshell.shell.core.driver_context import AutoLoadDetails, AutoLoadResource, AutoLoadAttribute
 
-from trafficgenerator.tgn_utils import ApiType
 from ixexplorer.ixe_app import init_ixe
 
 
@@ -26,7 +25,7 @@ class IxiaHandler(object):
             port = '4555'
         rsa_id = path.join(path.dirname(__file__), 'id_rsa')
 
-        self.ixia = init_ixe(ApiType.socket, self.logger, host=controller_address, port=int(port), rsa_id=rsa_id)
+        self.ixia = init_ixe(self.logger, host=controller_address, port=int(port), rsa_id=rsa_id)
         self.ixia.connect()
         self.ixia.add(address)
 
@@ -95,7 +94,9 @@ class IxiaHandler(object):
                                     name='Port' + str(port_id),
                                     relative_address=relative_address)
         self.resources.append(resource)
-        supported_speeds = port.supported_speeds() if port.supported_speeds() else ['0']
+        supported_speeds = port.supported_speeds()
+        if not supported_speeds:
+            supported_speeds = ['0']
         self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
                                                  attribute_name='CS_TrafficGeneratorPort.Max Speed',
                                                  attribute_value=int(max(supported_speeds, key=int))))
