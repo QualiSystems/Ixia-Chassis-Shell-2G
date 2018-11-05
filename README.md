@@ -46,13 +46,9 @@ For detailed information about the shell’s structure and attributes, see the [
 
 ### Requirements
 
-Release: Ixia Chassis 2G Shell 2.0.4
+▪ CloudShell version **8.1 and up**
 
-▪ 2G Chassis Shell: CloudShell version 8.1 and above
-
-▪ Controller Shells: 
-* Ixia IxNetwork Controller Shell - CloudShell version 8.0 and above
-* Ixia IxLoad Controller Shell - CloudShell version 7.0 and above
+▪ Ixia chassis version **8.01 and up**
 
 ### Data Model
 #### **Ixia Chassis Families and Models**
@@ -61,21 +57,36 @@ The chassis families and models are listed in the following table:
 
 |Family|Model|Description|
 |:---|:---|:---|
-|Traffic Generator Chassis|Ixia Chassis|Ixia Chassis|
-|Module|Generic Traffic Generator Module|Modules located on the chassis|
-|Port Group|Generic Port Group|Generic Port Group|
-|Port|Generic Traffic Generator Port|Generic Traffic Generator Port|
+|CS_TrafficGeneratorChassis|Ixia Chassis Shell 2G|Ixia chassis|
+|CS_TrafficGeneratorModule|Ixia Chassis Shell 2G.GenericTrafficGeneratorModule|Ixia module|
+|CS_TrafficGeneratorPortGroup|Ixia Chassis Shell 2G.GenericTrafficGeneratorPortGroup|Ixia port group|
+|CS_TrafficGeneratorPort|Ixia Chassis Shell 2G.GenericTrafficGeneratorPort|Ixia port|
+|CS_PowerPort|Ixia Chassis Shell 2G.GenericPowerPort|power port|
 
 #### **Ixia Chassis Attributes**
 
 The attribute names and types are listed in the following table:
 
-|Attribute|Type|Description|
-|:---|:---|:---|
-|Model Name|String|The catalog name of the device model. This attribute will be displayed in CloudShell instead of the CloudShell model.|
-|Serial Number|Text|The serial number of the resource.|
-|Server Description|String|The full description of the server. Usually includes the OS, exact firmware version, and additional characteristics of the device.|
-|Vendor|String|The firmware version of the resource.|
+|Attribute|Type|Default value|Description|
+|:---|:---|:---|:---|
+|CS_TrafficGeneratorChassis.Model Name|string||The catalog name of the Ixia chassis model. This attribute will be displayed in CloudShell instead of the CloudShell model.|
+|CS_TrafficGeneratorChassis.Vendor|string|Spirent|The name of the Ixia chassis manufacture.|
+|CS_TrafficGeneratorChassis.Version|string||The firmware version of the Ixia chassis.|
+|Ixia Chassis Shell 2G.Serial Number|string||The serial number of the Ixia chassis.|
+|Ixia Chassis Shell 2G.Server Description|string||The full description of the server. Usually includes the OS, exact firmware version and additional characteritics of the device.|
+|Ixia Chassis Shell 2G.Client Install Path|string||NA for this resource.|
+|Ixia Chassis Shell 2G.Controller Address|string||The IP address of IxTclServer - either on the chassis or on third party machine.|
+|Ixia Chassis Shell 2G.Controller TCP Port|string||The TCP port of the IxTclServer - default is 4555 for Windows based Ixia chassis and 8022 for Linux based Ixia chassis.|
+|Ixia Chassis Shell 2G.Password|string||NA for this resource.|
+|Ixia Chassis Shell 2G.Power Management|boolean|True|Used by the power management orchestration, if enabled, to determine whether to automatically manage the device power status.|
+|Ixia Chassis Shell 2G.User|string||NA for this resource.|
+|CS_TrafficGeneratorModule.Model Name|string||The catalog name of the Ixia module model. This attribute will be displayed in CloudShell instead of the CloudShell model.|
+|Ixia Chassis Shell 2G.GenericTrafficGeneratorModule.Serial Number|string||The serial number of the Ixia module.|
+|Ixia Chassis Shell 2G.GenericTrafficGeneratorModule.Version|string||The firmware version of the Ixia module.|
+|CS_TrafficGeneratorPort.Configured Controllers|string||Specifies what controller can be used with the ports (IxLoad controller, BP controller etc...)|
+|CS_TrafficGeneratorPort.Logical Name|string||The port's logical name in the test configuration. If kept emtpy - allocation will applied in the blue print.|
+|CS_TrafficGeneratorPort.Max Speed|string||Max speed supported by the interface (default units - MB).|
+|Ixia Chassis Shell 2G.CS_TrafficGeneratorPort.Media Type|string||Interface media type. Possible values are Fiber and/or Copper (comma-separated).|
 
 ### Automation
 This section describes the automation (drivers or scripts) associated with the data model. The shell’s driver is associated with the model and provided as part of the shell package).There are two types of automation processes, Autoload and Resource. Autoload is executed when creating the resource in the Inventory dashboard, while resource commands are run in the Sandbox, providing that the resource has been discovered and is online.
