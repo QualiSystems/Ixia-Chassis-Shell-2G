@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 Tests for `TestCenterChassisDriver`
@@ -7,7 +5,6 @@ Tests for `TestCenterChassisDriver`
 
 import sys
 import logging
-import unittest
 
 from shellfoundry.releasetools.test_helper import create_autoload_context_2g
 
@@ -20,9 +17,9 @@ address = '192.168.42.217'
 address = 'localhost'
 
 
-class TestIxiaChassis2GDriver(unittest.TestCase):
+class TestIxiaChassis2GDriver(object):
 
-    def setUp(self):
+    def setup(self):
         self.context = create_autoload_context_2g(model='Ixia Chassis Shell 2G', address=address,
                                                   controller=controller, port=port, client_install_path='')
         self.driver = IxiaChassis2GDriver()
@@ -30,19 +27,15 @@ class TestIxiaChassis2GDriver(unittest.TestCase):
         print self.driver.logger.handlers[0].baseFilename
         self.driver.logger.addHandler(logging.StreamHandler(sys.stdout))
 
-    def tearDown(self):
+    def teardown(self):
         pass
 
-    def testHelloWorld(self):
+    def test_hello_world(self):
         pass
 
-    def testAutoload(self):
+    def test_autoload(self):
         self.inventory = self.driver.get_inventory(self.context)
         for r in self.inventory.resources:
             print r.relative_address, r.model, r.name
         for a in self.inventory.attributes:
             print a.relative_address, a.attribute_name, a.attribute_value
-
-
-if __name__ == '__main__':
-    sys.exit(unittest.main())

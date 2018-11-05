@@ -1,12 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """
 Tests for `IxiaChassisDriver`
 """
-
-import sys
-import unittest
 
 from cloudshell.api.cloudshell_api import ResourceAttributesUpdateRequest, AttributeNameValue, CloudShellAPISession
 
@@ -34,18 +29,18 @@ ixia_chassis = {
                 }
 
 
-class TestIxiaChassis2GShell(unittest.TestCase):
+class TestIxiaChassis2GShell(object):
 
     session = None
 
-    def setUp(self):
+    def setup(self):
         self.session = CloudShellAPISession('localhost', 'admin', 'admin', 'Global')
 
-    def tearDown(self):
+    def teardown(self):
         for resource in self.session.GetResourceList('Testing').Resources:
             self.session.DeleteResource(resource.Name)
 
-    def testHelloWorld(self):
+    def test_hello_world(self):
         pass
 
     def test_win_ixos(self):
@@ -75,7 +70,3 @@ class TestIxiaChassis2GShell(unittest.TestCase):
         resource_details = self.session.GetResourceDetails(self.resource.Name)
         assert(len(resource_details.ChildResources) == properties['modules'])
         self.session.DeleteResource(self.resource.Name)
-
-
-if __name__ == '__main__':
-    sys.exit(unittest.main())

@@ -67,3 +67,4 @@ cloudshell_config.yml
 deployment/
 
 *.pdf
+.pytest_cache
