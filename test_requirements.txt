@@ -1,3 +1,6 @@
+pytest
+GitPython
+
 cloudshell-shell-core
 cloudshell-automation-api>=9.1,<9.2
 cloudshell-traffic>=2.0.1

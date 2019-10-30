@@ -68,3 +68,5 @@ deployment/
 
 *.pdf
 .pytest_cache
+
+venv*
