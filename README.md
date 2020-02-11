@@ -2,9 +2,9 @@
 
 # Ixia Chassis 2G Shell  
 
-Release date: June 2018
+Release date: February 2020
 
-Shell version: 2.0.4
+Shell version: 2.1.1
 
 Document version: 1.2.3
 
@@ -32,12 +32,12 @@ For more information on the Ixia Chassis, see the Ixia official product document
 
 To model an Ixia Chassis device in CloudShell, use one of the following controllers, which provide automation commands to run on the chassis, such as Load Configuration, Start Traffic/Test, Get Statistics: 
 
-▪ <a href="https://community.quali.com/repos/1259/ixia-ixnetwork-controller-shell" target="_blank">Ixia IxNetwork Controller Shell</a>
+▪ <a href="https://community.quali.com/repos/4369/ixia-ixnetwork-controller-2-gen-shell" target="_blank">Ixia IxNetwork Controller 2G Shell</a>
 
-▪ <a href="https://community.quali.com/repos/1396/ixia-ixload-controller-shell" target="_blank">Ixia IxLoad Controller Shell</a>
+▪ <a href="https://community.quali.com/repos/4368/ixia-ixload-controller-2-gen-shell" target="_blank">Ixia IxLoad Controller 2G Shell</a>
 
 ### Standard version
-The Ixia Chassis 2G Shell 2.0.4 is based on the Traffic Shell standard *cloudshell_traffic_generator_chassis_standard_1_0_3.yaml*.
+The Ixia Chassis 2G Shell 2.1.1 is based on the Traffic Shell standard *cloudshell_traffic_generator_chassis_standard_1_0_3.yaml*.
 
 For detailed information about the shell’s structure and attributes, see the [Traffic Shell standard](https://github.com/QualiSystems/shell-traffic-standard/blob/master/spec/traffic_standard.md) in GitHub.
 
