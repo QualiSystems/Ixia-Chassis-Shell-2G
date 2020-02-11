@@ -1,23 +1,30 @@
 
 from os import path
 
-from cloudshell.shell.core.driver_context import AutoLoadDetails, AutoLoadResource, AutoLoadAttribute
+from cloudshell.traffic.tg import TgChassisHandler
 
 from ixexplorer.ixe_app import init_ixe
 
+from ixia_data_model import Ixia_Chassis_Shell_2G, GenericTrafficGeneratorModule, GenericTrafficGeneratorPort
 
-class IxiaHandler(object):
+
+class IxiaHandler(TgChassisHandler):
 
     def initialize(self, context, logger):
         """
-        :type context: cloudshell.shell.core.driver_context.InitCommandContext
+        :param InitCommandContext context:
+        """
+        resource = Ixia_Chassis_Shell_2G.create_from_context(context)
+        super(self.__class__, self).initialize(resource, logger)
+
+    def load_inventory(self, context):
+        """
+        :param InitCommandContext context:
         """
 
-        self.logger = logger
-
         address = context.resource.address
-        controller_address = context.resource.attributes['Ixia Chassis Shell 2G.Controller Address']
-        port = context.resource.attributes['Ixia Chassis Shell 2G.Controller TCP Port']
+        controller_address = self.resource.controller_address
+        port = self.resource.controller_tcp_port
 
         if not controller_address:
             controller_address = address
@@ -29,77 +36,40 @@ class IxiaHandler(object):
         self.ixia.connect()
         self.ixia.add(address)
 
-    def get_inventory(self, context):
-        """ Return device structure with all standard attributes
-
-        :type context: cloudshell.shell.core.driver_context.AutoLoadCommandContext
-        :rtype: cloudshell.shell.core.driver_context.AutoLoadDetails
-        """
-
-        self.resources = []
-        self.attributes = []
         self.ixia.discover()
-        self._get_chassis_ixos(self.ixia.chassis_chain.values()[0])
-        details = AutoLoadDetails(self.resources, self.attributes)
-        return details
+        self._load_chassis(self.ixia.chassis_chain.values()[0])
+        return self.resource.create_autoload_details()
 
-    def _get_chassis_ixos(self, chassis):
+    def _load_chassis(self, chassis):
         """ Get chassis resource and attributes. """
 
-        self.attributes.append(AutoLoadAttribute(relative_address='',
-                                                 attribute_name='CS_TrafficGeneratorChassis.Model Name',
-                                                 attribute_value=chassis.typeName))
-        self.attributes.append(AutoLoadAttribute(relative_address='',
-                                                 attribute_name='Ixia Chassis Shell 2G.Serial Number',
-                                                 attribute_value=''))
-        self.attributes.append(AutoLoadAttribute(relative_address='',
-                                                 attribute_name='Ixia Chassis Shell 2G.Server Description',
-                                                 attribute_value=''))
-        self.attributes.append(AutoLoadAttribute(relative_address='',
-                                                 attribute_name='CS_TrafficGeneratorChassis.Vendor',
-                                                 attribute_value='Ixia'))
-        self.attributes.append(AutoLoadAttribute(relative_address='',
-                                                 attribute_name='CS_TrafficGeneratorChassis.Version',
-                                                 attribute_value=chassis.ixServerVersion))
+        self.resource.model_name = chassis.typeName
+        self.resource.vendor = 'Ixia'
+        self.resource.version = chassis.ixServerVersion
 
         for card_id, card in chassis.cards.items():
-            self._get_module_ixos(card_id, card)
+            self._load_module(card_id, card)
 
-    def _get_module_ixos(self, card_id, card):
+    def _load_module(self, card_id, card):
         """ Get module resource and attributes. """
 
-        relative_address = 'M' + str(card_id)
-        model = 'Ixia Chassis Shell 2G.GenericTrafficGeneratorModule'
-        resource = AutoLoadResource(model=model,
-                                    name='Module' + str(card_id),
-                                    relative_address=relative_address)
-        self.resources.append(resource)
-        self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
-                                                 attribute_name='CS_TrafficGeneratorModule.Model Name',
-                                                 attribute_value=card.typeName))
-        self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
-                                                 attribute_name=model + '.Serial Number',
-                                                 attribute_value=card.serialNumber.strip()))
-        self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
-                                                 attribute_name=model + '.Version',
-                                                 attribute_value=card.hwVersion))
-        for port_id, port in card.ports.items():
-            self._get_port_ixos(relative_address, port_id, port)
+        gen_module = GenericTrafficGeneratorModule('Module{}'.format(card_id))
+        self.resource.add_sub_resource('M{}'.format(card_id), gen_module)
+        gen_module.model_name = card.typeName
+        gen_module.serial_number = card.serialNumber.strip()
+        gen_module.version = card.hwVersion
 
-    def _get_port_ixos(self, card_relative_address, port_id, port):
+        for port_id, port in card.ports.items():
+            self._load_port(gen_module, port_id, port)
+
+    def _load_port(self, gen_module, port_id, port):
         """ Get port resource and attributes. """
 
-        relative_address = card_relative_address + '/P' + str(port_id)
-        resource = AutoLoadResource(model='Ixia Chassis Shell 2G.GenericTrafficGeneratorPort',
-                                    name='Port' + str(port_id),
-                                    relative_address=relative_address)
-        self.resources.append(resource)
+        gen_port = GenericTrafficGeneratorPort('Port{}'.format(port_id))
+        gen_module.add_sub_resource('P{}'.format(port_id), gen_port)
+
         supported_speeds = port.supported_speeds()
         if not supported_speeds:
             supported_speeds = ['0']
-        self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
-                                                 attribute_name='CS_TrafficGeneratorPort.Max Speed',
-                                                 attribute_value=int(max(supported_speeds, key=int))))
-        self.attributes.append(AutoLoadAttribute(relative_address=relative_address,
-                                                 attribute_name='CS_TrafficGeneratorPort.Configured Controllers',
-                                                 attribute_value='IxLoad'))
+        gen_port.max_speed = int(max(supported_speeds, key=int))
+        gen_port.configured_controllers='IxLoad'
