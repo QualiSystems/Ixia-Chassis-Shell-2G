@@ -10,10 +10,10 @@ class IxiaChassis2GDriver(TgChassisDriver):
         self.handler = IxiaHandler()
 
     def initialize(self, context):
-        super(self.__class__, self).initialize(context)
+        super().initialize(context)
 
     def cleanup(self):
-        super(self.__class__, self).cleanup()
+        super().cleanup()
 
     def get_inventory(self, context):
-        return super(self.__class__, self).get_inventory(context)
+        return super().get_inventory(context)

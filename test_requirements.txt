@@ -1,3 +1,5 @@
+-r src/requirements.txt
+
 pytest
-GitPython
 pyyaml
+shellfoundry_traffic

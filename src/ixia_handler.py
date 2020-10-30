@@ -15,7 +15,7 @@ class IxiaHandler(TgChassisHandler):
         :param InitCommandContext context:
         """
         resource = Ixia_Chassis_Shell_2G.create_from_context(context)
-        super(self.__class__, self).initialize(resource, logger)
+        super().initialize(resource, logger)
 
     def load_inventory(self, context):
         """
@@ -37,7 +37,7 @@ class IxiaHandler(TgChassisHandler):
         self.ixia.add(address)
 
         self.ixia.discover()
-        self._load_chassis(self.ixia.chassis_chain.values()[0])
+        self._load_chassis(list(self.ixia.chassis_chain.values())[0])
         return self.resource.create_autoload_details()
 
     def _load_chassis(self, chassis):
@@ -53,8 +53,8 @@ class IxiaHandler(TgChassisHandler):
     def _load_module(self, card_id, card):
         """ Get module resource and attributes. """
 
-        gen_module = GenericTrafficGeneratorModule('Module{}'.format(card_id))
-        self.resource.add_sub_resource('M{}'.format(card_id), gen_module)
+        gen_module = GenericTrafficGeneratorModule(f'Module{card_id}')
+        self.resource.add_sub_resource(f'M{card_id}', gen_module)
         gen_module.model_name = card.typeName
         gen_module.serial_number = card.serialNumber.strip()
         gen_module.version = card.hwVersion
