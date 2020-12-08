@@ -1,4 +1,3 @@
-
 """
 Tests for `IxiaChassis2GDriver`
 """
@@ -10,13 +9,12 @@ import pytest
 from cloudshell.api.cloudshell_api import AttributeNameValue, CloudShellAPISession, ResourceInfo
 from cloudshell.shell.core.driver_context import AutoLoadCommandContext
 from cloudshell.traffic.tg import TGN_CHASSIS_FAMILY, IXIA_CHASSIS_MODEL
-from shellfoundry_traffic.test_helpers import (create_session_from_deployment, resource_init_command_context,
-                                               create_autoload_resource, autoload_command_context, print_inventory)
+from shellfoundry_traffic.test_helpers import create_session_from_config, TestHelpers, print_inventory
 
 from src.ixia_driver import IxiaChassis2GDriver
 
 
-@pytest.fixture(params=[('192.168.65.30', '192.168.65.30', '8022'), ('192.168.65.30', 'localhost', '')],
+@pytest.fixture(params=[('192.168.65.21', '192.168.65.21', '8022'), ('192.168.65.21', 'localhost', '')],
                 ids=['linux', 'windows'])
 def dut(request):
     yield request.param
@@ -24,30 +22,38 @@ def dut(request):
 
 @pytest.fixture()
 def session() -> CloudShellAPISession:
-    yield create_session_from_deployment()
+    """ Yields session. """
+    yield create_session_from_config()
 
 
 @pytest.fixture()
-def autoload_context(session: CloudShellAPISession, dut: List[str]) -> AutoLoadCommandContext:
+def test_helpers(session: CloudShellAPISession) -> TestHelpers:
+    """ Yields initialized TestHelpers object. """
+    yield TestHelpers(session)
+
+
+@pytest.fixture()
+def autoload_context(test_helpers: TestHelpers, dut: List[str]) -> AutoLoadCommandContext:
     address, controller_address, controller_port = dut
     # noinspection SpellCheckingInspection
     attributes = {f'{IXIA_CHASSIS_MODEL}.Controller Address': controller_address,
                   f'{IXIA_CHASSIS_MODEL}.Controller TCP Port': controller_port,
                   f'{IXIA_CHASSIS_MODEL}.User': 'admin',
                   f'{IXIA_CHASSIS_MODEL}.Password': 'DxTbqlSgAVPmrDLlHvJrsA=='}
-    yield autoload_command_context(session, TGN_CHASSIS_FAMILY, IXIA_CHASSIS_MODEL, address, attributes)
+    yield test_helpers.autoload_command_context(TGN_CHASSIS_FAMILY, IXIA_CHASSIS_MODEL, address, attributes)
 
 
 @pytest.fixture()
-def driver(session: CloudShellAPISession, dut: List[str]) -> IxiaChassis2GDriver:
+def driver(test_helpers: TestHelpers, dut: List[str]) -> IxiaChassis2GDriver:
+    """ Yields initialized IxiaChassis2GDriver. """
     address, controller_address, controller_port = dut
     # noinspection SpellCheckingInspection
     attributes = {f'{IXIA_CHASSIS_MODEL}.Controller Address': controller_address,
                   f'{IXIA_CHASSIS_MODEL}.Controller TCP Port': controller_port,
                   f'{IXIA_CHASSIS_MODEL}.User': 'admin',
                   f'{IXIA_CHASSIS_MODEL}.Password': 'DxTbqlSgAVPmrDLlHvJrsA=='}
-    init_context = resource_init_command_context(session, TGN_CHASSIS_FAMILY, IXIA_CHASSIS_MODEL, address, attributes,
-                                                 'test-ixia')
+    init_context = test_helpers.resource_init_command_context(TGN_CHASSIS_FAMILY, IXIA_CHASSIS_MODEL, address,
+                                                              attributes, 'test-ixia')
     driver = IxiaChassis2GDriver()
     driver.initialize(init_context)
     print(driver.logger.handlers[0].baseFilename)
@@ -55,13 +61,13 @@ def driver(session: CloudShellAPISession, dut: List[str]) -> IxiaChassis2GDriver
 
 
 @pytest.fixture()
-def autoload_resource(session: CloudShellAPISession, dut: List[str]) -> ResourceInfo:
+def autoload_resource(session: CloudShellAPISession, test_helpers: TestHelpers, dut: List[str]) -> ResourceInfo:
     address, controller_address, controller_port = dut
     attributes = [AttributeNameValue(f'{IXIA_CHASSIS_MODEL}.Controller Address', controller_address),
                   AttributeNameValue(f'{IXIA_CHASSIS_MODEL}.Controller TCP Port', controller_port),
                   AttributeNameValue(f'{IXIA_CHASSIS_MODEL}.User', 'admin'),
                   AttributeNameValue(f'{IXIA_CHASSIS_MODEL}.Password', 'admin')]
-    resource = create_autoload_resource(session, IXIA_CHASSIS_MODEL, 'test-ixia', address, attributes)
+    resource = test_helpers.create_autoload_resource(IXIA_CHASSIS_MODEL, 'test-ixia', address, attributes)
     yield resource
     session.DeleteResource(resource.Name)
 
