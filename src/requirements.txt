@@ -3,5 +3,5 @@ cloudshell-shell-core>=4,<5
 cloudshell-automation-api>=9.1,<9.2
 cloudshell-traffic==3.0.2
 
-paramiko==1.15.2
+paramiko==2.7.2
 pyixexplorer==1.0.1
