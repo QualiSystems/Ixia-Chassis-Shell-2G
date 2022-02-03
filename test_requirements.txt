@@ -2,4 +2,9 @@
 
 pytest
 pyyaml
+cloudshell-traffic>=3.3,<3.4
 shellfoundry_traffic
+
+pylint
+pre-commit
+black[d]
