@@ -4,12 +4,14 @@ user=pypiadmin
 password=pypiadmin
 
 install:
-	python -m pip install -U pip==20.2.4
-	pip install -i http://$(repo):8036 --trusted-host $(repo) -U --pre -r test_requirements.txt
+	python -m pip install -U pip
+	pip install -i http://$(repo):8036 --trusted-host $(repo) -U --pre --no-cache-dir cloudshell-traffic
+	pip install -i http://$(repo):8036 --trusted-host $(repo) -U --pre --no-cache-dir shellfoundry-traffic
+	pip install -i http://$(repo):8036 --trusted-host $(repo) -U --pre -r requirements-dev.txt
 
 .PHONY: build
 build:
 	shellfoundry install
 
 download:
-	pip download -i http://$(repo):8036 --trusted-host $(repo) --pre -r src/requirements.txt -d dist/downloads
+	pip download -i http://$(repo):8036 --trusted-host $(repo) --pre -r requirements-dev.txt -d dist/downloads

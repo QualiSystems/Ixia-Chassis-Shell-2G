@@ -71,10 +71,11 @@ class IxiaChassis2GDriver(ResourceDriverInterface):
         for port_id, port in card.ports.items():
             self._load_port(gen_module, port_id, port)
 
-    def _load_port(self, gen_module: GenericTrafficGeneratorPort, port_id: int, port: IxePort) -> None:
+    @staticmethod
+    def _load_port(gen_module: GenericTrafficGeneratorPort, port_id: int, port: IxePort) -> None:
         """Get port resource and attributes."""
-        gen_port = GenericTrafficGeneratorPort("Port{}".format(port_id))
-        gen_module.add_sub_resource("P{}".format(port_id), gen_port)
+        gen_port = GenericTrafficGeneratorPort(f"Port{port_id}")
+        gen_module.add_sub_resource(f"P{port_id}", gen_port)
 
         supported_speeds = port.supported_speeds()
         if not supported_speeds:
