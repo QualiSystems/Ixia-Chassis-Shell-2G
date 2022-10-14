@@ -2,9 +2,9 @@
 
 # Ixia Chassis 2G Shell  
 
-Release date: February 2020
+Release date: October 2020
 
-Shell version: 3.0.0
+Shell version: 3.1.0
 
 Document version: 1.2.4
 
@@ -32,12 +32,12 @@ For more information on the Ixia Chassis, see the Ixia official product document
 
 To model an Ixia Chassis device in CloudShell, use one of the following controllers, which provide automation commands to run on the chassis, such as Load Configuration, Start Traffic/Test, Get Statistics: 
 
-▪ <a href="https://community.quali.com/repos/4369/ixia-ixnetwork-controller-2-gen-shell" target="_blank">Ixia IxNetwork Controller 2G Shell</a>
+▪ <a href="https://github.com/QualiSystems/Ixia-IxNetwork-Controller-Shell-2G" target="_blank">Ixia IxNetwork Controller 2G Shell</a>
 
-▪ <a href="https://community.quali.com/repos/4368/ixia-ixload-controller-2-gen-shell" target="_blank">Ixia IxLoad Controller 2G Shell</a>
+▪ <a href="https://github.com/QualiSystems/Ixia-IxLoad-Controller-Shell-2G" target="_blank">Ixia IxLoad Controller 2G Shell</a>
 
 ### Standard version
-The Ixia Chassis 2G Shell 3.0.0 is based on the Traffic Shell standard *cloudshell_traffic_generator_chassis_standard_1_0_3.yaml*.
+The Ixia Chassis 2G Shell 3.0.1 is based on the Traffic Shell standard *cloudshell_traffic_generator_chassis_standard_1_0_3.yaml*.
 
 For detailed information about the shell’s structure and attributes, see the [Traffic Shell standard](https://github.com/QualiSystems/shell-traffic-standard/blob/master/spec/traffic_standard.md) in GitHub.
 
@@ -211,7 +211,7 @@ To suggest an idea for the product, see [Quali's Idea box](https://community.qua
 
 To connect with Quali users and experts from around the world, ask questions and discuss issues, see [Quali's Community forums](https://community.quali.com/forums). 
 
-To use traffic generator ports as abstract resources, see [CloudShell's Online Help](https://help.quali.com/Online%20Help/9.1/Portal/Content/CSP/LAB-MNG/Traffic-Gens-Abst.htm?Highlight=traffic%20generator).
+To use traffic generator ports as abstract resources, see [CloudShell's Online Help](https://help.quali.com/Online%20Help/0.0/cloudshell/Content/Home.htm).
 
 # Release Notes
 ### What's New
