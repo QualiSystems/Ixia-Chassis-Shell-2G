@@ -9,7 +9,7 @@ from _pytest.fixtures import SubRequest
 from cloudshell.api.cloudshell_api import AttributeNameValue, CloudShellAPISession, ResourceInfo
 from cloudshell.shell.core.driver_context import AutoLoadCommandContext
 from cloudshell.traffic.tg import IXIA_CHASSIS_MODEL, TGN_CHASSIS_FAMILY
-from shellfoundry_traffic.test_helpers import TestHelpers, create_session_from_config, print_inventory
+from shellfoundry_traffic.test_helpers import TgTestHelpers, print_inventory, session, test_helpers  # noqa: F401
 
 from ixia_driver import IxiaChassis2GDriver
 
@@ -21,19 +21,7 @@ def dut(request: SubRequest) -> list:
 
 
 @pytest.fixture()
-def session() -> CloudShellAPISession:
-    """Yield session."""
-    return create_session_from_config()
-
-
-@pytest.fixture()
-def test_helpers(session: CloudShellAPISession) -> TestHelpers:
-    """Yields initialized TestHelpers object."""
-    return TestHelpers(session)
-
-
-@pytest.fixture()
-def autoload_context(test_helpers: TestHelpers, dut: List[str]) -> AutoLoadCommandContext:
+def autoload_context(test_helpers: TgTestHelpers, dut: List[str]) -> AutoLoadCommandContext:
     """Yield Ixia chassis shell command context for resource commands testing."""
     address, controller_address, controller_port = dut
     # noinspection SpellCheckingInspection
@@ -47,7 +35,7 @@ def autoload_context(test_helpers: TestHelpers, dut: List[str]) -> AutoLoadComma
 
 
 @pytest.fixture()
-def driver(test_helpers: TestHelpers, dut: List[str]) -> Iterable[IxiaChassis2GDriver]:
+def driver(test_helpers: TgTestHelpers, dut: List[str]) -> Iterable[IxiaChassis2GDriver]:
     """Yield initialized IxiaChassis2GDriver."""
     address, controller_address, controller_port = dut
     # noinspection SpellCheckingInspection
@@ -67,7 +55,7 @@ def driver(test_helpers: TestHelpers, dut: List[str]) -> Iterable[IxiaChassis2GD
 
 
 @pytest.fixture()
-def autoload_resource(session: CloudShellAPISession, test_helpers: TestHelpers, dut: List[str]) -> Iterable[ResourceInfo]:
+def autoload_resource(session: CloudShellAPISession, test_helpers: TgTestHelpers, dut: List[str]) -> Iterable[ResourceInfo]:
     """Yield Ixia chassis resource for shell autoload testing."""
     address, controller_address, controller_port = dut
     attributes = [

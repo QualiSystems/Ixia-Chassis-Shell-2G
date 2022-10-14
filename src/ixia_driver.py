@@ -25,6 +25,7 @@ class IxiaChassis2GDriver(ResourceDriverInterface):
         """Initialize Ixia chassis shell (from API)."""
         self.logger = get_qs_logger(log_group="traffic_shells", log_file_prefix=context.resource.name)
         self.logger.setLevel(logging.DEBUG)
+        logging.getLogger("tgn.ixexplorer").parent = self.logger
 
     def cleanup(self) -> None:
         """Cleanup Ixia chassis shell (from API)."""
@@ -43,7 +44,7 @@ class IxiaChassis2GDriver(ResourceDriverInterface):
             port = "4555"
         rsa_id = path.join(path.dirname(__file__), "id_rsa")
 
-        ixia = init_ixe(self.logger, host=controller_address, port=int(port), rsa_id=rsa_id)
+        ixia = init_ixe(controller_address, int(port), rsa_id)
         ixia.connect()
         ixia.add(address)
 
