@@ -11,7 +11,7 @@ from cloudshell.shell.core.driver_context import AutoLoadCommandContext
 from cloudshell.traffic.tg import IXIA_CHASSIS_MODEL, TGN_CHASSIS_FAMILY
 from shellfoundry_traffic.test_helpers import TgTestHelpers, print_inventory, session, test_helpers  # noqa: F401
 
-from ixia_driver import IxiaChassis2GDriver
+from ixia_driver import IxiaChassisShell2GDriver
 
 
 @pytest.fixture(params=[["192.168.65.26", "192.168.65.26", "8022"]], ids=["linux"])
@@ -35,7 +35,7 @@ def autoload_context(test_helpers: TgTestHelpers, dut: List[str]) -> AutoLoadCom
 
 
 @pytest.fixture()
-def driver(test_helpers: TgTestHelpers, dut: List[str]) -> Iterable[IxiaChassis2GDriver]:
+def driver(test_helpers: TgTestHelpers, dut: List[str]) -> Iterable[IxiaChassisShell2GDriver]:
     """Yield initialized IxiaChassis2GDriver."""
     address, controller_address, controller_port = dut
     # noinspection SpellCheckingInspection
@@ -48,7 +48,7 @@ def driver(test_helpers: TgTestHelpers, dut: List[str]) -> Iterable[IxiaChassis2
     init_context = test_helpers.resource_init_command_context(
         TGN_CHASSIS_FAMILY, IXIA_CHASSIS_MODEL, address, attributes, "test-ixia"
     )
-    driver = IxiaChassis2GDriver()
+    driver = IxiaChassisShell2GDriver()
     driver.initialize(init_context)
     yield driver
     driver.cleanup()
@@ -69,14 +69,14 @@ def autoload_resource(session: CloudShellAPISession, test_helpers: TgTestHelpers
     session.DeleteResource(resource.Name)
 
 
-def test_autoload(driver: IxiaChassis2GDriver, autoload_context: AutoLoadCommandContext) -> None:
+def test_autoload(driver: IxiaChassisShell2GDriver, autoload_context: AutoLoadCommandContext) -> None:
     """Test direct (driver) auto load command."""
     inventory = driver.get_inventory(autoload_context)
     print_inventory(inventory)
 
 
 def test_autoload_session(session: CloudShellAPISession, autoload_resource: ResourceInfo, dut: List[str]) -> None:
-    """Test indirect (shell) auto load command."""
+    """Test indirect (shell) autoload command."""
     session.AutoLoad(autoload_resource.Name)
     resource_details = session.GetResourceDetails(autoload_resource.Name)
     assert len(resource_details.ChildResources) == 1

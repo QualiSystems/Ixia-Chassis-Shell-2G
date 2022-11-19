@@ -13,7 +13,7 @@ from ixexplorer.ixe_hw import IxeCard, IxeChassis, IxePort
 from ixia_data_model import GenericTrafficGeneratorModule, GenericTrafficGeneratorPort, Ixia_Chassis_Shell_2G
 
 
-class IxiaChassis2GDriver(ResourceDriverInterface):
+class IxiaChassisShell2GDriver(ResourceDriverInterface):
     """Ixia chassis shell driver."""
 
     def __init__(self) -> None:
