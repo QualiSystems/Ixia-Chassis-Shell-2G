@@ -14,7 +14,7 @@ from shellfoundry_traffic.test_helpers import TgTestHelpers, print_inventory, se
 from ixia_driver import IxiaChassisShell2GDriver
 
 
-@pytest.fixture(params=[["192.168.65.26", "192.168.65.26", "8022"]], ids=["linux"])
+@pytest.fixture(params=[["192.168.26.66", "192.168.26.66", "8022"]], ids=["linux"])
 def dut(request: SubRequest) -> list:
     """Yield Ixia device under test parameters."""
     return request.param
